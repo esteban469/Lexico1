@@ -9,6 +9,8 @@ namespace Lexico1
     {
         static void Main(string[] args)
         {
+            try 
+            {
             using (Lexico T = new Lexico())
             {
                 T.SetContenido("HOLA");
@@ -22,5 +24,10 @@ namespace Lexico1
                 Console.WriteLine(T.GetContenido() + " = " + T.GetClasificacion());
             }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
+  }
 }
