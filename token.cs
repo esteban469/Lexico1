@@ -9,7 +9,7 @@ namespace Lexico1
     {
         public enum Tipos
         {
-            Identificador,Numero,Caracter
+            Identificador,Numero,Caracter,FinSentencia,InicioBloque,FinBloque,OperadorTermino,OperadorTernario
         }
         private string contenido;
         private Tipos clasificacion;
@@ -18,19 +18,19 @@ namespace Lexico1
             contenido = "";
             clasificacion = Tipos.Identificador;
         }
-        public void SetContenido(string contenido)
+        public void setContenido(string contenido)
         {
             this.contenido = contenido;
         }
-        public void SetClasificacion(Tipos clasificacion)
+        public void setClasificacion(Tipos clasificacion)
         {
             this.clasificacion = clasificacion;
         }
-        public string GetContenido()
+        public string getContenido()
         {
             return this.contenido;
         }
-        public Tipos GetClasificacion()
+        public Tipos getClasificacion()
         {
             return this.clasificacion;
         }

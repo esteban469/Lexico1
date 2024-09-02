@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+
 /*
- Requerimientos
- 1.- Sobrecargar el constructor lexico para que reciba como argumento el nombre del archivo a compilar 
- 2.- Tener contador de lineas 
+    Requerimiento 1: Sobrecargar el constructor Lexico para que reciba como
+                     argumento el nombre del archvo a compilar
+    Requerimiento 2: Tener un contador de lineas 
 */
 namespace Lexico1
 {
@@ -32,15 +33,16 @@ namespace Lexico1
                 throw new Error("El archivo prueba.cpp no existe",log);
             }
         }
-        /*public Lexico();
+        /*
+        public Lexico(string nombre)
         {
             
-            Si nombre = suma.cpp
-            LOG=nombre.log
-            ASM=suma.asm
-            Y validar la extension del nombre del archivo 
-            
-        } */
+                Si nombre = suma.cpp
+                LOG = suma.log
+                ASM = suma.asm
+                Y validar la extension del nombre del archivo
+        }
+        */
         public void Dispose()
         {
             archivo.Close();
@@ -50,28 +52,61 @@ namespace Lexico1
         public void nextToken()
         {
             char c;
-            String buffer="";
-            while(char.IsWhiteSpace(c = (char)archivo.Read()))
-            {
+            string buffer = "";
 
-            }
-            if(char.IsLetter(c))
+            while (char.IsWhiteSpace(c = (char)archivo.Read()))
             {
-                SetClasificacion(Tipos.Identificador);
             }
-            else if(char.IsDigit(c))
+            buffer+=c;
+            if (char.IsLetter(c))
             {
-                SetClasificacion(Tipos.Numero);
+                setClasificacion(Tipos.Identificador);
+                while (char.IsLetterOrDigit(c=(char)archivo.Peek()))
+                {
+                    buffer+=c;
+                    archivo.Read();
+                }
+            }
+            else if (c==';')
+            {
+                setClasificacion(Tipos.FinSentencia);
+            }
+            else if (c=='{')
+            {
+                setClasificacion(Tipos.InicioBloque);
+            }
+            else if (c=='}')
+            {
+                setClasificacion(Tipos.FinBloque);
+            }
+            else if(c=='?')
+            {
+                setClasificacion(Tipos.OperadorTernario);
+            }
+            else if(c=='+'||c=='-')
+            {
+                setClasificacion(Tipos.OperadorTermino);
+            }
+            // agregar el operador de factor * / %
+            else if (char.IsDigit(c))
+            {
+                setClasificacion(Tipos.Numero);
+                while (char.IsDigit(c=(char)archivo.Peek()))
+                {
+                    buffer+=c;
+                    archivo.Read();
+                }
             }
             else
             {
-                SetClasificacion(Tipos.Caracter);
+                setClasificacion(Tipos.Caracter);
             }
-            SetContenido(buffer);
-            log.WriteLine(GetContenido() + " = " + GetClasificacion());
-
-            archivo.Read();
-            archivo.Peek();
+            setContenido(buffer);
+            log.WriteLine(getContenido() + " = " + getClasificacion());            
+        } 
+        public bool finArchivo()
+        {
+            return archivo.EndOfStream;
         }
     }
 }

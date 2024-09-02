@@ -9,25 +9,20 @@ namespace Lexico1
     {
         static void Main(string[] args)
         {
-            try 
+            try
             {
-            using (Lexico T = new Lexico())
+                using (Lexico l = new Lexico())
+                {
+                    while (!l.finArchivo())
+                    {
+                        l.nextToken();
+                    }
+                }
+            }
+            catch (Exception e)
             {
-                T.SetContenido("HOLA");
-                T.SetClasificacion(Token.Tipos.Identificador);
-
-                Console.WriteLine(T.GetContenido() + " = " + T.GetClasificacion());
-
-                T.SetContenido("123");
-                T.SetClasificacion(Token.Tipos.Numero);
-
-                Console.WriteLine(T.GetContenido() + " = " + T.GetClasificacion());
+                Console.WriteLine("Error: " + e.Message);
             }
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
     }
-  }
 }

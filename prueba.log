@@ -1,1 +1,11 @@
-Error: El archivo prueba.cpp no existe
+{ = InicioBloque
+X26 = Identificador
+= = Caracter
+35 = Numero
++ = OperadorTermino
+? = Caracter
+100 = Numero
+- = OperadorTermino
+; = FinSentencia
+} = FinBloque
+￿ = Caracter
