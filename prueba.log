@@ -3,9 +3,15 @@ X26 = Identificador
 = = Caracter
 35 = Numero
 + = OperadorTermino
-? = Caracter
+? = OperadorTernario
 100 = Numero
 - = OperadorTermino
 ; = FinSentencia
+* = OperadorFactor
+200 = Numero
+/ = OperadorFactor
+4 = Numero
+= = Caracter
+5 = Numero
+% = OperadorFactor
 } = FinBloque
-￿ = Caracter

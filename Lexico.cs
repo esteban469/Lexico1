@@ -88,6 +88,10 @@ namespace Lexico1
                 setClasificacion(Tipos.OperadorTermino);
             }
             // agregar el operador de factor * / %
+            else if(c=='*' || c=='/' || c=='%')
+            {
+                setClasificacion(Tipos.OperadorFactor);
+            } 
             else if (char.IsDigit(c))
             {
                 setClasificacion(Tipos.Numero);
