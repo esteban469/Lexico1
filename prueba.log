@@ -15,4 +15,7 @@
 || = OperadorLogico
 && = OperadorLogico
 | = Caracter
++ = OperadorTermino
+* = OperadorFactor
+% = OperadorFactor
 } = FinBloque

@@ -23,6 +23,7 @@ namespace Lexico1
         // int linea;
         public Lexico()
         {
+            
             // linea = 1;
             log     = new StreamWriter("prueba.log");
             asm     = new StreamWriter("prueba.asm");

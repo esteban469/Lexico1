@@ -9,6 +9,7 @@ namespace Lexico1
     {
         static void Main(string[] args)
         {
+           string archivoCPP = @"prueba.cpp"; 
             try
             {
                 using (Lexico l = new Lexico())
@@ -16,13 +17,18 @@ namespace Lexico1
                     while (!l.finArchivo())
                     {
                         l.nextToken();
+                        
                     }
                 }
+             
+            int contadorLinea = File.ReadLines(archivoCPP).Count();
+            Console.WriteLine($"El archivo {archivoCPP} tiene {contadorLinea} líneas.");
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: " + e.Message);
             }
+            
         }
     }
 }
