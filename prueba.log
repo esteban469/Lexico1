@@ -1,3 +1,4 @@
+El archivo prueba.cpp tiene: 4 lineas
 { ------ InicioBloque
 && ------ OperadorLogico
 & ------ Caracter
@@ -12,4 +13,3 @@
 > ------ OperadorRelacional
 > ------ OperadorRelacional
 } ------ FinBloque
-El archivo Lexico.cs tiene: 274 lineas

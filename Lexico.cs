@@ -23,6 +23,7 @@ namespace Lexico1
         StreamWriter log;
         StreamWriter asm;
         int lineCount = 0;
+        int contLineaPruebaCPP = 0;
 
 
 
@@ -41,7 +42,9 @@ namespace Lexico1
             {
                 throw new Error("El archivo prueba.cpp no existe", log);
             }
-            contarLineas();
+
+            contarLineasPruebaCPP();
+
         }
         //***************************REQUERIMIENTO 1***********************
 
@@ -60,8 +63,9 @@ namespace Lexico1
             }
             else
             {
-                throw new Error("El archivo no es un archivo.cpp o no existe", log);
+                throw new Error("El archivo no es un .cpp o no existe", log);
             }
+            contarLineas();
 
         }
 
@@ -71,7 +75,7 @@ namespace Lexico1
 
         public void Dispose()
         {
-            log.WriteLine($"El archivo Lexico.cs tiene: {lineCount} lineas");
+
             archivo.Close();
             log.Close();
             asm.Close();
@@ -80,7 +84,7 @@ namespace Lexico1
         //********* CONTADOR DE LINEAS ***************
         public void contarLineas()
         {
-            using (StreamReader leerDoc = new StreamReader("Lexico.cs"))
+            using (StreamReader leerDoc = new StreamReader("nuevoArchivo.cpp"))
             {
                 string line;
                 while ((line = leerDoc.ReadLine()) != null)
@@ -88,8 +92,25 @@ namespace Lexico1
                     lineCount++;
                 }
             }
+            log.WriteLine($"El archivo nuevoArchivo.cpp tiene: {lineCount} lineas");
         }
+
+
+        public void contarLineasPruebaCPP()
+        {
+            using (StreamReader leerPrueba = new StreamReader("prueba.cpp"))
+            {
+                string line;
+                while ((line = leerPrueba.ReadLine()) != null)
+                {
+                    contLineaPruebaCPP++;
+                }
+            }
+            log.WriteLine($"El archivo prueba.cpp tiene: {contLineaPruebaCPP} lineas");
+        }
+
         //********* FIN CONTADOR DE LINEAS ***************
+
         public void nextToken()
         {
             char c;
@@ -187,7 +208,6 @@ namespace Lexico1
                 setClasificacion(Tipos.OperadorRelacional);
                 if ((c = (char)archivo.Peek()) == '=')
                 {
-                    setClasificacion(Tipos.OperadorRelacional);
                     buffer += c;
                     archivo.Read();
                 }
@@ -198,7 +218,6 @@ namespace Lexico1
                 setClasificacion(Tipos.OperadorRelacional);
                 if ((c = (char)archivo.Peek()) == '=' || c == '>')
                 {
-                    setClasificacion(Tipos.OperadorRelacional);
                     buffer += c;
                     archivo.Read();
                 }
