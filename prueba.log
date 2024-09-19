@@ -1,15 +1,11 @@
-El archivo prueba.cpp tiene: 4 lineas
+El archivo prueba.cpp tiene: 7 lineas
 { ------ InicioBloque
-&& ------ OperadorLogico
-& ------ Caracter
-|| ------ OperadorLogico
+"1 2 a  ------ Cadena
 | ------ Caracter
-! ------ OperadorLogico
-!= ------ OperadorRelacional
+a ------ Identificador
+-> ------ Puntero
 == ------ OperadorRelacional
-< ------ OperadorRelacional
-< ------ OperadorRelacional
-<> ------ OperadorRelacional
-> ------ OperadorRelacional
-> ------ OperadorRelacional
+&& ------ OperadorLogico
+1 ------ Numero
+a ------ Identificador
 } ------ FinBloque

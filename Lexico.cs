@@ -29,6 +29,7 @@ namespace Lexico1
 
         public Lexico()
         {
+            //lineCount = 1;
             log = new StreamWriter("prueba.log");
             asm = new StreamWriter("prueba.asm");
             log.AutoFlush = true;
@@ -118,7 +119,10 @@ namespace Lexico1
 
             while (char.IsWhiteSpace(c = (char)archivo.Read()))
             {
-
+                if (c == '\n')
+                {
+                    lineCount++;
+                }
             }
 
             buffer += c;
@@ -269,6 +273,37 @@ namespace Lexico1
                     }
                 }
             }
+            //OPERADOR CADENA
+            else if (c == '"')
+            {
+                setClasificacion(Tipos.Caracter);
+                
+                if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
+                {
+                    setClasificacion(Tipos.Cadena);
+                    buffer += c;
+                    archivo.Read();
+                    while (c != '"')
+                    {
+                        
+                        if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
+                        {
+                            buffer += c;
+                            archivo.Read();
+                        }
+                        else
+                        {
+                            archivo.Read();
+                            break;
+                        }
+                    }    
+                }
+                
+                
+                  
+            }
+
+
 
 
             else
