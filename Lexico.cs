@@ -273,11 +273,11 @@ namespace Lexico1
                     }
                 }
             }
-            //OPERADOR CADENA
+            //OPERADOR CADENA INICIO
             else if (c == '"')
             {
                 setClasificacion(Tipos.Caracter);
-                
+
                 if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
                 {
                     setClasificacion(Tipos.Cadena);
@@ -285,7 +285,7 @@ namespace Lexico1
                     archivo.Read();
                     while (c != '"')
                     {
-                        
+
                         if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
                         {
                             buffer += c;
@@ -296,12 +296,10 @@ namespace Lexico1
                             archivo.Read();
                             break;
                         }
-                    }    
+                    }
                 }
-                
-                
-                  
             }
+            //OPERADOR CADENA FIN
 
 
 
