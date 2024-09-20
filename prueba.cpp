@@ -1,7 +1,7 @@
 
 {
         
-        "1 2 a" || a -> ==
-        "esta es una cadena"
-        && 1 a 
+         || + "esta es una cadena " -> ==
+         "cadena de prueba" !=
+        
 }

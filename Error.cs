@@ -13,5 +13,11 @@ namespace Lexico1
             log.WriteLine("Error: " + message);
 
         }
+
+        public Error(string message, StreamWriter log, int lineCount ) : base(message + " en la linea" + lineCount)
+        {
+            log.WriteLine("Error: " + message + " en la linea" + lineCount);
+        }
     }
+
 }

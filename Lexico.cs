@@ -273,33 +273,37 @@ namespace Lexico1
                     }
                 }
             }
-            //OPERADOR CADENA INICIO
+            //***************** OPERADOR CADENA INICIO *************************
             else if (c == '"')
             {
                 setClasificacion(Tipos.Caracter);
+                c = (char)archivo.Read();
 
-                if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
+                setClasificacion(Tipos.Cadena);
+                buffer += c;
+
+                while (true) 
                 {
-                    setClasificacion(Tipos.Cadena);
-                    buffer += c;
-                    archivo.Read();
-                    while (c != '"')
+                    if (finArchivo()) 
                     {
-
-                        if (char.IsDigit(c = (char)archivo.Peek()) || char.IsLetter(c = (char)archivo.Peek()) || char.IsWhiteSpace(c = (char)archivo.Peek()))
-                        {
-                            buffer += c;
-                            archivo.Read();
-                        }
-                        else
-                        {
-                            archivo.Read();
-                            break;
-                        }
+                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas (\" \") en la linea {lineCount + 1}", log);
                     }
+
+                    c = (char)archivo.Read();  
+
+                    if (c == '"')  
+                    {
+                        buffer += c;
+                        break;
+                    }
+
+                    buffer += c;  
                 }
             }
-            //OPERADOR CADENA FIN
+
+
+            //********************* OPERADOR CADENA FIN **********************
+
 
 
 
