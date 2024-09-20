@@ -282,7 +282,7 @@ namespace Lexico1
                 setClasificacion(Tipos.Cadena);
                 buffer += c;
 
-                while (true) 
+                while (c != '"') 
                 {
                     if (finArchivo()) 
                     {
@@ -304,6 +304,52 @@ namespace Lexico1
 
             //********************* OPERADOR CADENA FIN **********************
 
+            //********************* OPERADOR CARACTER INICIO ********************
+            else if(c== '#') //SIGNO DE GATO
+            {
+                setClasificacion(Tipos.Caracter);
+                if(char.IsDigit(c = (char)archivo.Peek()))
+                {
+                    buffer += c;
+                    archivo.Read();
+                    while (char.IsDigit(c = (char)archivo.Peek()))
+                    {
+                        buffer += c;
+                        archivo.Read();
+                    }
+
+                }
+
+            }
+
+
+            else if (c == '\'') // CARACTER ENTRE COMILLAS SIMPLES
+            {
+                setClasificacion(Tipos.Caracter);
+                c = (char)archivo.Read();
+                buffer += c;
+                c = (char)archivo.Read();
+                if (c != '\'')
+                {
+                    throw new Error($"ERROR LEXICO, Se esperaba solo un caracter entre comillas simples (\' \') en la linea {lineCount + 1}", log);
+                }
+                while (c != '\'')
+                {
+                    if (finArchivo()) 
+                    {
+                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas simples (\' \') en la linea {lineCount + 1}", log);
+                    }
+
+                    c = (char)archivo.Read();  
+
+                    if (c == '\'')  
+                    {
+                        buffer += c;
+                    }  
+                }       
+            }
+
+            //********************* OPERADOR CARACTER FIN **********************
 
 
 
