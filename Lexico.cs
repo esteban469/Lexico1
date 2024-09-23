@@ -136,6 +136,8 @@ namespace Lexico1
                     archivo.Read();
                 }
             }
+            //********************* OPERADOR NUMERO INICIO *********************
+
             else if (char.IsDigit(c))
             {
                 setClasificacion(Tipos.Numero);
@@ -144,7 +146,99 @@ namespace Lexico1
                     buffer += c;
                     archivo.Read();
                 }
+                if (c == '.')
+                {
+                    buffer += c;
+                    archivo.Read();
+                    if (char.IsDigit(c = (char)archivo.Peek()) || c == 'e' || c == 'E')//
+                    { //                   
+                        while (char.IsDigit(c = (char)archivo.Peek()))
+                        {
+                            buffer += c;
+                            archivo.Read();
+                        }
+                        if ((c = (char)archivo.Peek()) == 'e' || (c = (char)archivo.Peek()) == 'E')
+                        {
+                            buffer += c;
+                            archivo.Read();
+                            if (char.IsDigit(c = (char)archivo.Peek()) || c == '+' || c == '-') //
+                            {
+                                while (char.IsDigit(c = (char)archivo.Peek()))
+                                {
+                                    buffer += c;
+                                    archivo.Read();
+                                }
+                                if ((c = (char)archivo.Peek()) == '+' || c == '-')
+                                {
+                                    buffer += c;
+                                    archivo.Read();
+                                    if (char.IsDigit(c = (char)archivo.Peek()))
+                                    {
+                                        while (char.IsDigit(c = (char)archivo.Peek()))
+                                        {
+                                            buffer += c;
+                                            archivo.Read();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (+,-) en la linea {lineCount + 1}", log);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (e,E) en la linea {lineCount + 1}", log);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        throw new Error($"ERROR LEXICO: Se esperaba un digito despues del punto en la linea {lineCount + 1}", log);
+                    }
+                }
+
+
+                else if ((c = (char)archivo.Peek()) == 'e' || c == 'E')
+                {
+                    buffer += c;
+                    archivo.Read();
+                    if (char.IsDigit(c = (char)archivo.Peek()) || c == '+' || c == '-')
+                    {
+                        while (char.IsDigit(c = (char)archivo.Peek()))
+                        {
+                            buffer += c;
+                            archivo.Read();
+                        }
+                        if ((c = (char)archivo.Peek()) == '+' || c == '-')
+                        {
+                            buffer += c;
+                            archivo.Read();
+                            if (char.IsDigit(c = (char)archivo.Peek()))
+                            {
+                                while (char.IsDigit(c = (char)archivo.Peek()))
+                                {
+                                    buffer += c;
+                                    archivo.Read();
+                                }
+                            }
+                            else
+                            {
+                                throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (+,-) en la linea {lineCount + 1}", log);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Error($"ERROR LEXICO: Se esperaba un digito en la linea {lineCount + 1}", log);
+                    }
+                }
+
             }
+
+
+            //********************* OPERADOR NUMERO FIN **************************
             else if (c == ';')
             {
                 setClasificacion(Tipos.FinSentencia);
@@ -282,22 +376,22 @@ namespace Lexico1
                 setClasificacion(Tipos.Cadena);
                 buffer += c;
 
-                while (c != '"') 
+                while (c != '"')
                 {
-                    if (finArchivo()) 
+                    if (finArchivo())
                     {
                         throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas (\" \") en la linea {lineCount + 1}", log);
                     }
 
-                    c = (char)archivo.Read();  
+                    c = (char)archivo.Read();
 
-                    if (c == '"')  
+                    if (c == '"')  // SI ENCUENTRA CIERRE DE COMILLAS TERMINAR WHILE
                     {
                         buffer += c;
                         break;
                     }
 
-                    buffer += c;  
+                    buffer += c;  // CONCATENAR CIERRE DE COMILLAS
                 }
             }
 
@@ -305,10 +399,10 @@ namespace Lexico1
             //********************* OPERADOR CADENA FIN **********************
 
             //********************* OPERADOR CARACTER INICIO ********************
-            else if(c== '#') //SIGNO DE GATO
+            else if (c == '#') //SIGNO DE GATO
             {
                 setClasificacion(Tipos.Caracter);
-                if(char.IsDigit(c = (char)archivo.Peek()))
+                if (char.IsDigit(c = (char)archivo.Peek()))
                 {
                     buffer += c;
                     archivo.Read();
@@ -322,6 +416,10 @@ namespace Lexico1
 
             }
 
+            else if (c == '@') // CARACTE ARROBA
+            {
+                setClasificacion(Tipos.Caracter);
+            }
 
             else if (c == '\'') // CARACTER ENTRE COMILLAS SIMPLES
             {
@@ -329,29 +427,36 @@ namespace Lexico1
                 c = (char)archivo.Read();
                 buffer += c;
                 c = (char)archivo.Read();
-                if (c != '\'')
+                if (c != '\'') //VALIDAR SI HAY MAS DE UN CARACTER
                 {
-                    throw new Error($"ERROR LEXICO, Se esperaba solo un caracter entre comillas simples (\' \') en la linea {lineCount + 1}", log);
+                    if (char.IsWhiteSpace(c = (char)archivo.Peek()))// IGNORAR LOS ESPACIOS
+                    {
+                        c = (char)archivo.Read();
+                    }
+                    else
+                    {   //SI HAY MAS DE UN CARACTER ENTRE COMILLAS SIMPLES LANZAR ERROR
+                        throw new Error($"ERROR LEXICO, Se esperaba solo un caracter entre comillas simples (\' \') en la linea {lineCount + 1}", log);
+                    }
+
                 }
                 while (c != '\'')
                 {
-                    if (finArchivo()) 
-                    {
+                    if (finArchivo())
+                    {   // SI NO ENCUENTRA EL CIERRE DE COMILLAS SIMPLES AL FINALIZAR ARCHIVO LANZAR ERROR
                         throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas simples (\' \') en la linea {lineCount + 1}", log);
                     }
 
-                    c = (char)archivo.Read();  
+                    c = (char)archivo.Read();
 
-                    if (c == '\'')  
+                    if (c == '\'')
                     {
                         buffer += c;
-                    }  
-                }       
+                    }
+                }
+                buffer += c;// CONCATENAR COMILLAS FINALES
             }
 
             //********************* OPERADOR CARACTER FIN **********************
-
-
 
 
             else
