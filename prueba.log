@@ -1,20 +1,18 @@
-El archivo prueba.cpp tiene: 18 lineas
-{ ------ InicioBloque
-|| ------ OperadorLogico
-+ ------ OperadorTermino
-"cadena de prueba" ------ Cadena
-!= ------ OperadorRelacional
-" " ------ Cadena
--> ------ Puntero
-== ------ OperadorRelacional
-@ ------ Caracter
-# ------ Caracter
-#3 ------ Caracter
-#999 ------ Caracter
-'a' ------ Caracter
-123 ------ Numero
-123.456 ------ Numero
-123e+12 ------ Numero
-123.456 ------ Numero
-123.E+12 ------ Numero
-} ------ FinBloque
+{            ---- InicioBloque
+230          ---- Numero
+230.30       ---- Numero
+230e30       ---- Numero
+230e-30      ---- Numero
+230e+30      ---- Numero
+230.30e30    ---- Numero
+230.30e-30   ---- Numero
+230.30e+30   ---- Numero
+"hola mundo" ---- Cadena
+#            ---- Caracter
+#64          ---- Caracter
+'@'          ---- Caracter
+230.30e+30   ---- Numero
++            ---- OperadorTermino
+30           ---- Numero
+}            ---- FinBloque
+El archivo prueba.cpp tiene: 15 lineas

@@ -22,14 +22,13 @@ namespace Lexico1
         StreamReader archivo;
         StreamWriter log;
         StreamWriter asm;
-        int lineCount = 0;
-        int contLineaPruebaCPP = 0;
+        int lineCount;
 
 
 
         public Lexico()
         {
-            //lineCount = 1;
+            lineCount = 1;
             log = new StreamWriter("prueba.log");
             asm = new StreamWriter("prueba.asm");
             log.AutoFlush = true;
@@ -44,15 +43,14 @@ namespace Lexico1
                 throw new Error("El archivo prueba.cpp no existe", log);
             }
 
-            contarLineasPruebaCPP();
+
 
         }
         //***************************REQUERIMIENTO 1***********************
 
         public Lexico(string nuevoArchivo)
         {
-
-
+            lineCount = 1;
             if (File.Exists(nuevoArchivo) && Path.GetExtension(nuevoArchivo) == ".cpp")
             {
 
@@ -66,7 +64,6 @@ namespace Lexico1
             {
                 throw new Error("El archivo no es un .cpp o no existe", log);
             }
-            contarLineas();
 
         }
 
@@ -76,41 +73,11 @@ namespace Lexico1
 
         public void Dispose()
         {
-
+            log.WriteLine($"El archivo prueba.cpp tiene: {lineCount} lineas");
             archivo.Close();
             log.Close();
             asm.Close();
-
         }
-        //********* CONTADOR DE LINEAS ***************
-        public void contarLineas()
-        {
-            using (StreamReader leerDoc = new StreamReader("nuevoArchivo.cpp"))
-            {
-                string line;
-                while ((line = leerDoc.ReadLine()) != null)
-                {
-                    lineCount++;
-                }
-            }
-            log.WriteLine($"El archivo nuevoArchivo.cpp tiene: {lineCount} lineas");
-        }
-
-
-        public void contarLineasPruebaCPP()
-        {
-            using (StreamReader leerPrueba = new StreamReader("prueba.cpp"))
-            {
-                string line;
-                while ((line = leerPrueba.ReadLine()) != null)
-                {
-                    contLineaPruebaCPP++;
-                }
-            }
-            log.WriteLine($"El archivo prueba.cpp tiene: {contLineaPruebaCPP} lineas");
-        }
-
-        //********* FIN CONTADOR DE LINEAS ***************
 
         public void nextToken()
         {
@@ -146,61 +113,27 @@ namespace Lexico1
                     buffer += c;
                     archivo.Read();
                 }
+
                 if (c == '.')
                 {
                     buffer += c;
                     archivo.Read();
-                    if (char.IsDigit(c = (char)archivo.Peek()) || c == 'e' || c == 'E')//
-                    { //                   
+                    if (char.IsDigit(c = (char)archivo.Peek()))
+                    {
                         while (char.IsDigit(c = (char)archivo.Peek()))
                         {
                             buffer += c;
                             archivo.Read();
                         }
-                        if ((c = (char)archivo.Peek()) == 'e' || (c = (char)archivo.Peek()) == 'E')
-                        {
-                            buffer += c;
-                            archivo.Read();
-                            if (char.IsDigit(c = (char)archivo.Peek()) || c == '+' || c == '-') //
-                            {
-                                while (char.IsDigit(c = (char)archivo.Peek()))
-                                {
-                                    buffer += c;
-                                    archivo.Read();
-                                }
-                                if ((c = (char)archivo.Peek()) == '+' || c == '-')
-                                {
-                                    buffer += c;
-                                    archivo.Read();
-                                    if (char.IsDigit(c = (char)archivo.Peek()))
-                                    {
-                                        while (char.IsDigit(c = (char)archivo.Peek()))
-                                        {
-                                            buffer += c;
-                                            archivo.Read();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (+,-) en la linea {lineCount + 1}", log);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (e,E) en la linea {lineCount + 1}", log);
-                            }
 
-                        }
                     }
                     else
                     {
-                        throw new Error($"ERROR LEXICO: Se esperaba un digito despues del punto en la linea {lineCount + 1}", log);
+                        throw new Error($"Error: Se esperaba un digito después del punto en la linea {lineCount}", log);
                     }
                 }
 
-
-                else if ((c = (char)archivo.Peek()) == 'e' || c == 'E')
+                if (c == 'e' || c == 'E')
                 {
                     buffer += c;
                     archivo.Read();
@@ -211,7 +144,7 @@ namespace Lexico1
                             buffer += c;
                             archivo.Read();
                         }
-                        if ((c = (char)archivo.Peek()) == '+' || c == '-')
+                        if (c == '+' || c == '-')
                         {
                             buffer += c;
                             archivo.Read();
@@ -225,18 +158,16 @@ namespace Lexico1
                             }
                             else
                             {
-                                throw new Error($"ERROR LEXICO: Se esperaba un digito despues de (+,-) en la linea {lineCount + 1}", log);
+                                throw new Error($"Error: Se esperaba un digito después del signo (+,-) en la linea {lineCount}", log);
                             }
                         }
                     }
                     else
                     {
-                        throw new Error($"ERROR LEXICO: Se esperaba un digito en la linea {lineCount + 1}", log);
+                        throw new Error($"Error: Se esperaba un digito o (+,-) en la linea {lineCount}", log);
                     }
                 }
-
             }
-
 
             //********************* OPERADOR NUMERO FIN **************************
             else if (c == ';')
@@ -380,7 +311,7 @@ namespace Lexico1
                 {
                     if (finArchivo())
                     {
-                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas (\" \") en la linea {lineCount + 1}", log);
+                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas (\" \") en la linea {lineCount}", log);
                     }
 
                     c = (char)archivo.Read();
@@ -416,11 +347,6 @@ namespace Lexico1
 
             }
 
-            else if (c == '@') // CARACTE ARROBA
-            {
-                setClasificacion(Tipos.Caracter);
-            }
-
             else if (c == '\'') // CARACTER ENTRE COMILLAS SIMPLES
             {
                 setClasificacion(Tipos.Caracter);
@@ -435,7 +361,7 @@ namespace Lexico1
                     }
                     else
                     {   //SI HAY MAS DE UN CARACTER ENTRE COMILLAS SIMPLES LANZAR ERROR
-                        throw new Error($"ERROR LEXICO, Se esperaba solo un caracter entre comillas simples (\' \') en la linea {lineCount + 1}", log);
+                        throw new Error($"ERROR LEXICO, Se esperaba solo un caracter entre comillas simples (\' \') en la linea {lineCount}", log);
                     }
 
                 }
@@ -443,7 +369,7 @@ namespace Lexico1
                 {
                     if (finArchivo())
                     {   // SI NO ENCUENTRA EL CIERRE DE COMILLAS SIMPLES AL FINALIZAR ARCHIVO LANZAR ERROR
-                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas simples (\' \') en la linea {lineCount + 1}", log);
+                        throw new Error($"ERROR LEXICO, Se esperaba cierre de comillas simples (\' \') en la linea {lineCount}", log);
                     }
 
                     c = (char)archivo.Read();
@@ -468,7 +394,10 @@ namespace Lexico1
             {
 
                 setContenido(buffer);
-                log.WriteLine(getContenido() + " ------ " + getClasificacion());
+                string contenido = getContenido();
+                string clasificacion = getClasificacion().ToString();
+                log.WriteLine($"{contenido,-12} ---- {clasificacion}");
+
             }
 
 

@@ -14,8 +14,8 @@ namespace Lexico1
             
 
         }
-        private string contenido;
-        private Tipos clasificacion;
+        public string contenido;
+        public Tipos clasificacion;
         public Token()
         {
             contenido = "";
